@@ -1,0 +1,46 @@
+// Question: https://leetcode.com/problems/remove-nodes-from-linked-list/description/
+
+/**
+ * Definition for singly-linked list.
+ * struct ListNode {
+ *     int val;
+ *     ListNode *next;
+ *     ListNode() : val(0), next(nullptr) {}
+ *     ListNode(int x) : val(x), next(nullptr) {}
+ *     ListNode(int x, ListNode *next) : val(x), next(next) {}
+ * };
+ */
+class Solution {
+public:
+    ListNode* removeNodes(ListNode* head) {
+        // Reverse the linked list
+        ListNode *p = NULL,*q = head,*r = head;
+        while(q != NULL) {
+            r = r->next;
+            q->next = p;
+            p = q;
+            q = r;
+        }
+
+        // Check each node if reqd, reverse link, return new head
+        q = r = p;
+        p = NULL;
+        int maxVal = 0;
+        while(q != NULL) {
+            if(q->val >= maxVal) {
+                // retain
+                maxVal = max(maxVal, q->val);
+                r = r->next;
+                q->next = p;
+                p = q;
+                q = r;
+            } else {
+                // ignore
+                r = r->next;
+                q = r;
+            }
+        }
+
+        return p;
+    }
+};
